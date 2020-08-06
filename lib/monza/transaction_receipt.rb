@@ -17,6 +17,7 @@ module Monza
     attr_reader :original_purchase_date_ms
     attr_reader :original_purchase_date_pst
     attr_reader :web_order_line_item_id
+    attr_reader :is_upgraded
 
     attr_reader :expires_date
     attr_reader :expires_date_ms
@@ -36,6 +37,7 @@ module Monza
       @original_purchase_date_ms = Time.zone.at(attributes['original_purchase_date_ms'].to_i / 1000)
       @original_purchase_date_pst = DateTime.parse(attributes['original_purchase_date_pst'].gsub("America/Los_Angeles","PST")) if attributes['original_purchase_date_pst']
       @web_order_line_item_id = attributes['web_order_line_item_id']
+      @is_upgraded = false
 
       if attributes['expires_date']
         begin
@@ -59,6 +61,9 @@ module Monza
       end
       if attributes['cancellation_date']
         @cancellation_date = DateTime.parse(attributes['cancellation_date'])
+      end
+      if attributes['is_upgraded'] == 'true'
+        @is_upgraded = true
       end
     end # end initialize
 
